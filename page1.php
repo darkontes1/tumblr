@@ -5,7 +5,7 @@ session_start();
     include (__DIR__.'/include/functions_page1.php');  //include des fonctions qui peuvent être utilisées dans la page
     include (__DIR__.'/include/header_page1.php');   //include du header
     //Mettre __DIR__.'/ dans les includes permet de sécuriser le chemin
-    var_dump($_SESSION);
+    //var_dump($_SESSION);
 
     $allImages = TRUE; //Affecte par défaut l'affichage de toutes les images 
     //Si on est connecté =>
@@ -19,7 +19,7 @@ session_start();
                     $error = $_FILES['image']['error'];
                     $tmpNameImage = $_FILES['image']['tmp_name'];
 
-                    //var_dump($_FILES);
+                    var_dump($_FILES);
                     //$image = filter_input(INPUT_POST,'image',FILTER_SANITIZE_STRING); 1**
                     $caption = filter_input(INPUT_POST,'caption',FILTER_SANITIZE_STRING);
                     //création de l'enregistrement dans la BDD
