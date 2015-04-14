@@ -18,19 +18,24 @@
         //Récupère les images dans la BDD
         function getImages(){
             $bdd = new BDD();   //Objet bdd pour faire la connection
-            $bdd->createLinkBDD();//link avec la BDD
+            $link = $bdd->createLinkBDD();//link avec la BDD
             $tabImages = array();
-            $reqGetImages = 'SELECT * FROM images'; //requète SQL
-            $resGetImages = mysqli_query($bdd,$reqGetImages);   //Resultat de le la requete SQL
-            while($rowGetImages = mysqli_fetch_assoc($resGetImages)){
+            $query = 'SELECT * FROM images'; //requète SQL
+            $data = $link->prepare($query);
+            $data->execute();
+            $result = $data->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($result as $row) {
+                $tabImages[$row["nomImage"]] = $row["captionImage"];
+            }
                 $tabImages[$rowGetImages['nomImage']] = $rowGetImages['captionImage'];
             }
-            $bdd->closeBDD();
+            print_r($tabImages);
+            $bdd = null;
             return $tabImages;
         }
 
         //affichage des images
-        function createfigure($lienimage,$commentaire='') {
+        function createfigure($nomimage,$commentaire='') {
             echo '<figure>';
             echo '<div class="blocimg">';
             echo '<img src="'.DIR_IMG.'/'.$nomImage.'" alt="'.$nomImage.'">';
@@ -43,11 +48,12 @@
         function recupImage($image){
             $bdd = new BDD();   //Objet bdd pour faire la connection
             $bdd->createLinkBDD();//link avec la BDD
-            $reqSImages = 'SELECT * FROM images WHERE nomImage="'.$image.'"'; //requète SQL
-            $resSImages = mysqli_query($bdd,$reqSImages);   //Resultat de le la requete SQL
-            $rowSImages = mysqli_fetch_assoc($resSImages);
-            $bdd->closeBDD();
-            return $rowSImages;
+            $query = 'SELECT * FROM images WHERE nomImage="'.$image.'"'; //requète SQL
+            $data = $link->prepare($query);
+            $data->execute();
+            $result = $data->fetchAll(PDO::FETCH_ASSOC);
+            $bdd = null;
+            return $result;
         }
 
         //Récupère une image passée en paramètre dans la BDD et la créée

@@ -32,8 +32,8 @@
             $reqUsers .= 'VALUES ("'.$nom.'","'.$prenom.'","'.$hash.'",NOW())';
             $resUsers = mysqli_query($bdd,$reqUsers);
             //requête update
-            $login = mb_substr($prenom,0,1).'.'.mb_substr($nom,0,6).mysqli_insert_id($linkBDD); // login créé
-            $reqUsers = 'UPDATE users SET login="'.$login.'" WHERE idUser = "'.mysqli_insert_id($linkBDD).'"';
+            $login = mb_substr($prenom,0,1).'.'.mb_substr($nom,0,6).mysqli_insert_id($bdd); // login créé
+            $reqUsers = 'UPDATE users SET login="'.$login.'" WHERE idUser = "'.mysqli_insert_id($bdd).'"';
             $resUsers = mysqli_query($bdd,$reqUsers);
             $bdd->closeBDD();
             return $login;
