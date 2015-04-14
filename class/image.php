@@ -7,12 +7,12 @@
         private $createOn;
 
         //Constructeur d'une image
-        private function __construct($nomImage, $typeImage, $tmpNameImage, $captionImage, $createOn){
-            $this->nomImage = $nomImage;
+        private function __construct(/*$nomImage, $typeImage, $tmpNameImage, $captionImage, $createOn*/){
+            /*$this->nomImage = $nomImage;
             $this->typeImage = $typeImage;
             $this->tmpNameImage = $tmpNameImage;
             $this->captionImage = $captionImage;
-            $this->createOn = $createOn;
+            $this->createOn = $createOn;*/
         }
 
         //Récupère les images dans la BDD
@@ -56,28 +56,29 @@
         //Récupère une image passée en paramètre dans la BDD et la créée
         function getSingleImages($image){
             $bdd = new BDD();   //Objet bdd pour faire la connection
-            $bdd->createLinkBDD();//link avec la BDD
-            $reqSImages = 'SELECT * FROM images WHERE nomImage="'.$image.'"'; //requète SQL
-            $resSImages = mysqli_query($bdd,$reqSImages);   //Resultat de le la requete SQL
-            $rowSImages = mysqli_fetch_assoc($resSImages);
-            //var_dump($rowSImages);
-            createfigure($rowSImages['nomImage'],$rowSImages['captionImage']);
-            $bdd->closeBDD();
+            $link = $bdd->createLinkBDD();//link avec la BDD
+            $query = 'SELECT * FROM images WHERE nomImage="'.$image.'"'; //requète SQL
+            $data = $link->prepare($query);
+            $data->execute();
+            $result = $data->fetchAll(PDO::FETCH_ASSOC);
+            createfigure($result['nomImage'],$result['captionImage']);
+            $bdd = null;
         }
 
         //Supprime une image passée en paramètre de la BDD
         function deleteImage($image){
             $bdd = new BDD();   //Objet bdd pour faire la connection
-            $bdd->createLinkBDD();//link avec la BDD
-            $reqSImages = 'DELETE from images WHERE nomImage="'.$image.'"'; //requète SQL
-            $resSImages = mysqli_query($bdd,$reqSImages);   //Resultat de le la requete SQL
-            $bdd->closeBDD();
+            $link = $bdd->createLinkBDD();//link avec la BDD
+            $query = 'DELETE from images WHERE nomImage="'.$image.'"'; //requète SQL
+            $data = $link->prepare($query);
+            $data->execute();
+            $bdd = null;
         }
 
         //Update une image passée en paramètre de la BDD
         function updateImage($image,$nomImage='',$captionImage='',$real_path='',$createdOn='0000-00-00'){
             $bdd = new BDD();   //Objet bdd pour faire la connection
-            $bdd->createLinkBDD();//link avec la BDD
+            $link = $bdd->createLinkBDD();//link avec la BDD
             $recup = recupImage($image);
 
             if(empty($recup['nomImage'])){
