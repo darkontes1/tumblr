@@ -1,5 +1,5 @@
 <?php
-    class bdd{
+    class BDD{
         private $bdd = BDD; //La bdd que l'on utilise
         private $srv_bdd = SERVER_BDD;  //Le serveur bdd que l'on utilise
         private $mdp_bdd = MDP_BDD; //Le mdp de la bdd

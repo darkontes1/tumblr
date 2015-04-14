@@ -1,5 +1,5 @@
 <?php
-    class image{
+    class IMAGE{
         private $nomImage;
         private $typeImage;
         private $tmpNameImage;
@@ -17,7 +17,7 @@
 
         //Récupère les images dans la BDD
         function getImages(){
-            $bdd = new bdd();   //Objet bdd pour faire la connection
+            $bdd = new BDD();   //Objet bdd pour faire la connection
             $bdd->createLinkBDD();//link avec la BDD
             $tabImages = array();
             $reqGetImages = 'SELECT * FROM images'; //requète SQL
@@ -41,7 +41,7 @@
 
         //Récupère juste une image passée en paramètre dans la BDD
         function recupImage($image){
-            $bdd = new bdd();   //Objet bdd pour faire la connection
+            $bdd = new BDD();   //Objet bdd pour faire la connection
             $bdd->createLinkBDD();//link avec la BDD
             $reqSImages = 'SELECT * FROM images WHERE nomImage="'.$image.'"'; //requète SQL
             $resSImages = mysqli_query($bdd,$reqSImages);   //Resultat de le la requete SQL
@@ -52,7 +52,7 @@
 
         //Récupère une image passée en paramètre dans la BDD et la créée
         function getSingleImages($image){
-            $bdd = new bdd();   //Objet bdd pour faire la connection
+            $bdd = new BDD();   //Objet bdd pour faire la connection
             $bdd->createLinkBDD();//link avec la BDD
             $reqSImages = 'SELECT * FROM images WHERE nomImage="'.$image.'"'; //requète SQL
             $resSImages = mysqli_query($bdd,$reqSImages);   //Resultat de le la requete SQL
@@ -64,7 +64,7 @@
 
         //Supprime une image passée en paramètre de la BDD
         function deleteImage($image){
-            $bdd = new bdd();   //Objet bdd pour faire la connection
+            $bdd = new BDD();   //Objet bdd pour faire la connection
             $bdd->createLinkBDD();//link avec la BDD
             $reqSImages = 'DELETE from images WHERE nomImage="'.$image.'"'; //requète SQL
             $resSImages = mysqli_query($bdd,$reqSImages);   //Resultat de le la requete SQL
@@ -73,7 +73,7 @@
 
         //Update une image passée en paramètre de la BDD
         function updateImage($image,$nomImage='',$captionImage='',$real_path='',$createdOn='0000-00-00'){
-            $bdd = new bdd();   //Objet bdd pour faire la connection
+            $bdd = new BDD();   //Objet bdd pour faire la connection
             $bdd->createLinkBDD();//link avec la BDD
             $recup = recupImage($image);
 
@@ -114,7 +114,7 @@
         //Insert dans la base de données une nouvelle image avec upload de l'image
         function uploadImage($nomImage,$typeImage,$sizeImage,$error,$tmpNameImage,$captionImage){
             $extensions_valides = array('image/jpg','image/jpeg','image/gif','image/png');  //liste des extensions valides
-            $bdd = new bdd();   //Objet bdd pour faire la connection
+            $bdd = new BDD();   //Objet bdd pour faire la connection
             $bdd->createLinkBDD();//link avec la BDD
             //Si il y a une erreur lors du transfert de l'image
             if($error > 0){
