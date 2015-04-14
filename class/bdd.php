@@ -5,7 +5,7 @@
         private $mdp_bdd; //Le mdp de la bdd
         private $user_bdd;   //L'utilisateur de la bdd
         //constructeur de la bdd
-        private function __construct(){
+        public function __construct(){
             $this->bdd = BDD;
             $this->srv_bdd = SERVER_BDD;
             $this->mdp_bdd = MDP_BDD;

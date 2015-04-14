@@ -10,6 +10,7 @@ session_start();
 
     $allImages = TRUE; //Affecte par défaut l'affichage de toutes les images 
     echo "toto";
+
 ?>
 
 <?php

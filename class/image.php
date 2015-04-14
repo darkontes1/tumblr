@@ -7,7 +7,7 @@
         private $createOn;
 
         //Constructeur d'une image
-        private function __construct(/*$nomImage, $typeImage, $tmpNameImage, $captionImage, $createOn*/){
+        public function __construct(/*$nomImage, $typeImage, $tmpNameImage, $captionImage, $createOn*/){
             /*$this->nomImage = $nomImage;
             $this->typeImage = $typeImage;
             $this->tmpNameImage = $tmpNameImage;
