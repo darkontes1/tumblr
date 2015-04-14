@@ -6,6 +6,13 @@
         private $captionImage;
         private $createOn;
 
+        public function getNomImage(){
+            return $this->nomImage;
+        }
+
+        public function getCaptionImage(){
+            return $this->captionImage;
+        }
         //Constructeur d'une image
         public function __construct(/*$nomImage, $typeImage, $tmpNameImage, $captionImage, $createOn*/){
             /*$this->nomImage = $nomImage;
@@ -32,7 +39,7 @@
         }
 
         //affichage des images
-        function createfigure($nomimage,$commentaire='') {
+        function createfigure($nomImage,$captionImage='') {
             echo '<figure>';
             echo '<div class="blocimg">';
             echo '<img src="'.DIR_IMG.'/'.$nomImage.'" alt="'.$nomImage.'">';
@@ -67,7 +74,9 @@
             $data->execute();
             
             $result = $data->fetchAll(PDO::FETCH_ASSOC);
-            createfigure($result['nomImage'],$result['captionImage']);
+            var_dump($result);
+            $image = new IMAGE();
+            $image->createfigure($result[0]['nomImage'],$result[0]['captionImage']);
             $bdd = null;
         }
 
