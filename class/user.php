@@ -28,35 +28,39 @@
         //Ajoute un utilisateur dans la BDD
         function ajoutUsers($nom, $prenom, $password){
             $bdd = new BDD();   //Objet bdd pour faire la connection
-            $bdd->createLinkBDD();//link avec la BDD
+            $link = $bdd->createLinkBDD();//link avec la BDD
             $hash = crypt($password,'$5$'.SALT.'$');    //cryptage utiliser password_hash
-            $reqUsers = 'INSERT INTO users (nomUser,prenomUser,passwordUser,createdOn)';    //requête insert
-            $reqUsers .= 'VALUES ("'.$nom.'","'.$prenom.'","'.$hash.'",NOW())';
-            $resUsers = mysqli_query($bdd,$reqUsers);
+            $query = 'INSERT INTO users (nomUser,prenomUser,passwordUser,createdOn)'; //requète SQL
+            $query .= 'VALUES ("'.$nom.'","'.$prenom.'","'.$hash.'",NOW())';
+            $data = $link->prepare($query);
+            $data->execute();
             //requête update
-            $login = mb_substr($prenom,0,1).'.'.mb_substr($nom,0,6).mysqli_insert_id($bdd); // login créé
-            $reqUsers = 'UPDATE users SET login="'.$login.'" WHERE idUser = "'.mysqli_insert_id($bdd).'"';
-            $resUsers = mysqli_query($bdd,$reqUsers);
-            $bdd->closeBDD();
+            $id = $link->lastInsertId('id');
+            $login = mb_substr($prenom,0,1).'.'.mb_substr($nom,0,6).$id; // login créé
+            $query = 'UPDATE users SET login="'.$login.'" WHERE idUser = "'.$id.'"';
+            $data = $link->prepare($query);
+            $data->execute();
+            $bdd = null;
             return $login;
         }
 
         //Permet de trouver la personne qui se log
         function logUsers($tabUsers){
             $bdd = new BDD();   //Objet bdd pour faire la connection
-            $bdd->createLinkBDD();//link avec la BDD
+            $link = $bdd->createLinkBDD();//link avec la BDD
             $hash = crypt($tabUsers['passwordCo'],'$5$'.SALT.'$');  //cryptage on peut utiliser password_verify
-            $reqUsers = 'SELECT * FROM users WHERE login = "'.$tabUsers['loginCo'].'"';
-            $reqUsers .= 'AND passwordUser = "'.$hash.'"';
-            $resUsers = mysqli_query($bdd,$reqUsers);
-            if(mysqli_connect_errno($bdd)!=0){
+            $query = 'SELECT COUNT(*) FROM users WHERE login = "'.$tabUsers['loginCo'].'"';    //requète SQL
+            $query .= 'AND passwordUser = "'.$hash.'"';
+            $data = $link->prepare($query);
+            $data->execute();
+            $result = $data->fetchAll(PDO::FETCH_ASSOC);
+            $err = $link->errorInfo()
+            if($err !== '00000'){
                 return FALSE;
             }
-            $nbUsers = mysqli_num_rows($resUsers);  //compte le nombre de ligne que nous renvoie la requête
             $bdd->closeBDD();
             //Si aucun resultat =>
-            if($nbUsers==0){
-
+            if($result==0){
                 return FALSE;
             }
             //si un résultat =>
