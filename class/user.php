@@ -12,14 +12,16 @@
         //Récupère les logs des users dans la BDD
         function getUsers(){
             $bdd = new BDD();   //Objet bdd pour faire la connection
-            $bdd->createLinkBDD();//link avec la BDD
+            $link = $bdd->createLinkBDD();//link avec la BDD
             $tabUsers=array();
-            $reqGetUsers = 'SELECT * FROM users'; //requète SQL
-            $resGetUsers = mysqli_query($bdd,$reqGetUsers);   //Resultat de le la requete SQL
-            while($rowGetUsers = mysqli_fetch_assoc($resGetUsers)){
-                $tabUsers[$rowGetUsers['login']] = $rowGetUsers['passwordUser'];
+            $query = 'SELECT * FROM users'; //requète SQL
+            $data = $link->prepare($query);
+            $data->execute();
+            $result = $data->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($result as $row) {
+                $tabUsers[$row["login"]] = $row["passwordUser"];
             }
-            $bdd->closeBDD();
+            $bdd = null;
             return $tabUsers;
         }
 

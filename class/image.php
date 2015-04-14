@@ -27,9 +27,6 @@
             foreach ($result as $row) {
                 $tabImages[$row["nomImage"]] = $row["captionImage"];
             }
-                $tabImages[$rowGetImages['nomImage']] = $rowGetImages['captionImage'];
-            }
-            print_r($tabImages);
             $bdd = null;
             return $tabImages;
         }
