@@ -45,9 +45,12 @@
         function recupImage($image){
             $bdd = new BDD();   //Objet bdd pour faire la connection
             $link = $bdd->createLinkBDD();//link avec la BDD
-            $query = 'SELECT * FROM images WHERE nomImage="'.$image.'"'; //requète SQL
+            $query = 'SELECT * FROM images WHERE nomImage=:image'; //requète SQL
+            
             $data = $link->prepare($query);
+            $data->bindValue('image', $image);
             $data->execute();
+            
             $result = $data->fetchAll(PDO::FETCH_ASSOC);
             $bdd = null;
             return $result;
@@ -57,9 +60,12 @@
         function getSingleImages($image){
             $bdd = new BDD();   //Objet bdd pour faire la connection
             $link = $bdd->createLinkBDD();//link avec la BDD
-            $query = 'SELECT * FROM images WHERE nomImage="'.$image.'"'; //requète SQL
+            $query = 'SELECT * FROM images WHERE nomImage=:image'; //requète SQL
+            
             $data = $link->prepare($query);
+            $data->bindValue('image', $image);
             $data->execute();
+            
             $result = $data->fetchAll(PDO::FETCH_ASSOC);
             createfigure($result['nomImage'],$result['captionImage']);
             $bdd = null;
@@ -69,9 +75,12 @@
         function deleteImage($image){
             $bdd = new BDD();   //Objet bdd pour faire la connection
             $link = $bdd->createLinkBDD();//link avec la BDD
-            $query = 'DELETE from images WHERE nomImage="'.$image.'"'; //requète SQL
+            $query = 'DELETE from images WHERE nomImage=:image'; //requète SQL            
+            
             $data = $link->prepare($query);
+            $data->bindValue('image', $image);
             $data->execute();
+            
             $bdd = null;
         }
 
@@ -109,10 +118,19 @@
                 $createdOnUpd = $recup['createdOn'];
             }
 
-            $query = 'UPDATE images SET nomImage="'.$nomImageUpd.'", captionImage="'.$captionImageUpd.'",'; //requète SQL
-            $query .= 'real_path="'.$real_pathUpd.'", createdOn="'.$createdOnUpd.'" WHERE nomImage="'.$image.'"'; //requète SQL
+            $query = 'UPDATE images SET nomImage=:nomImageUpd, captionImage=:captionImageUpd,'; //requète SQL
+            $query .= 'real_path=:real_pathUpd, createdOn=:createdOnUpd WHERE nomImage=:image'; //requète SQL
+
+
             $data = $link->prepare($query);
+
+            $data->bindValue('image', $image);
+            $data->bindValue('nomImageUpd', $nomImageUpd);
+            $data->bindValue('captionImageUpd', $captionImageUpd);
+            $data->bindValue('real_pathUpd', $real_pathUpd);
+            $data->bindValue('createdOnUpd', $createdOnUpd);
             $data->execute();
+            
             $bdd = null;
         }
 
@@ -140,8 +158,13 @@
                 }
                 //INSERT INTO de l'image dans la BDD
                 $query = 'INSERT INTO images (nomImage,captionImage,real_path,createdOn)'; //requète SQL
-                $query .= 'VALUES ("'.$nomImage.'","'.$captionImage.'","'.$real_path.'",NOW())';    //requète SQL
+                $query .= 'VALUES (:nomImage,:captionImage,:real_path,NOW())';    //requète SQL
+                
                 $data = $link->prepare($query);
+                $data->bindValue('nomImage', $nomImage);
+                $data->bindValue('captionImage', $captionImage);
+                $data->bindValue('real_path', $real_path);
+                
                 $data->execute();
                
                 //Si la requête s'est mal passé, ça renvoie une erreur
