@@ -9,34 +9,34 @@ session_start();
 
     $allImages = TRUE; //Affecte par défaut l'affichage de toutes les images 
     //Si on est connecté =>
-        if(!empty($_POST))  //Vérifie si get n'est pas vide --> action à effectuer
-        { 
-            if($_SESSION['connect']==TRUE){
-                if(!empty($_FILES['image'])){
-                    $image = $_FILES['image']['name'];
-                    $type = $_FILES['image']['type'];
-                    $size = $_FILES['image']['size'];
-                    $error = $_FILES['image']['error'];
-                    $tmpNameImage = $_FILES['image']['tmp_name'];
+    if(!empty($_POST))  //Vérifie si get n'est pas vide --> action à effectuer
+    { 
+        if($_SESSION['connect']==TRUE){
+            if(!empty($_FILES['image'])){
+                $image = $_FILES['image']['name'];
+                $type = $_FILES['image']['type'];
+                $size = $_FILES['image']['size'];
+                $error = $_FILES['image']['error'];
+                $tmpNameImage = $_FILES['image']['tmp_name'];
 
-                    var_dump($_FILES);
-                    //$image = filter_input(INPUT_POST,'image',FILTER_SANITIZE_STRING); 1**
-                    $caption = filter_input(INPUT_POST,'caption',FILTER_SANITIZE_STRING);
-                    //création de l'enregistrement dans la BDD
-                    //createImage($image,$caption);     1**
-                    uploadImage($image,$type,$size,$error,$tmpNameImage,$caption);
-                }
-            } 
-        }
-        elseif(isset($_GET['singleimage']) && $_GET['singleimage'] != 'ALL'){
-            $singleImage = $_GET['singleimage'];//filter_input(INPUT_POST,,FILTER_SANITIZE_STRING);
-            $allImages = FALSE;
-            //echo $allImages;
-        }
-        else{
-            $_SESSION['connect']=TRUE;
-        }
-        $tabImages = getImages();
+                var_dump($_FILES);
+                //$image = filter_input(INPUT_POST,'image',FILTER_SANITIZE_STRING); 1**
+                $caption = filter_input(INPUT_POST,'caption',FILTER_SANITIZE_STRING);
+                //création de l'enregistrement dans la BDD
+                //createImage($image,$caption);     1**
+                uploadImage($image,$type,$size,$error,$tmpNameImage,$caption);
+            }
+        } 
+    }
+    elseif(isset($_GET['singleimage']) && $_GET['singleimage'] != 'ALL'){
+        $singleImage = $_GET['singleimage'];//filter_input(INPUT_POST,,FILTER_SANITIZE_STRING);
+        $allImages = FALSE;
+        //echo $allImages;
+    }
+    else{
+        $_SESSION['connect']=TRUE;
+    }
+    $tabImages = getImages();
     if($_SESSION['connect']==TRUE){   
     ?>
     <nav>

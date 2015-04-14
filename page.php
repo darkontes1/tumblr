@@ -8,5 +8,10 @@ session_start();
     include (__DIR__.'/class/image.php');
     include (__DIR__.'/class/user.php');
 
+    $allImages = TRUE; //Affecte par défaut l'affichage de toutes les images 
     echo "toto";
+?>
+
+<?php
+    include (__DIR__.'/include/footer_page1.php');
 ?>
