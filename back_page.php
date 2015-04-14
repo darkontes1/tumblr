@@ -7,6 +7,8 @@ session_start();
     include (__DIR__.'/class/user.php');
     $logon = FALSE;
 
+    $utilisateur = new USER();
+
     //Si on a cliquer sur le bouton de connexion
     if(filter_has_var(INPUT_POST, 'logon')){
 
@@ -25,17 +27,17 @@ session_start();
         );
 
         $tabPost = filter_input_array(INPUT_POST, $filterPost);
-        $logon = logUsers($tabPost);
+        $logon = $utilisateur->logUsers($tabPost);
 
         if($logon==TRUE){
             $_SESSION['connect'] = TRUE;
             $_SESSION['connectime'] = time();
-            header('location: page1.php');
+            header('location: page.php');
         }
         else{
-            printf('erreur lors du login');
+            echo 'erreur lors du login';
             $_SESSION['loginCo'] = $tabPost['loginCo'];
-            header('location: login.php');
+            header('location: login_page.php');
         }
     }
 
@@ -67,18 +69,18 @@ session_start();
         );
 
         $tabPost = filter_input_array(INPUT_POST, $filterPost);
-        var_dump($tabPost);
+        //var_dump($tabPost);
         //Si les mdp ne sont pas les mêmes
         if($tabPost['password']!=$tabPost['passwordVerif']){
             $_SESSION['formInscri']['nom'] = $tabPost['nom'];
             $_SESSION['formInscri']['prenom'] = $tabPost['prenom'];
-            header('location: login.php');
+            header('location: login_page.php');
         }
         //Si ils sont pareils on ajoute dans la BDD
         else{
             //rentrer dans la base de données avec le pwd qui est crypté dans la fonction
-            $_SESSION['newCompte'] = ajoutUsers($tabPost['nom'], $tabPost['prenom'], $tabPost['password']);
-            header('location: login.php');
+            $_SESSION['newCompte'] = $utilisateur->ajoutUsers($tabPost['nom'], $tabPost['prenom'], $tabPost['password']);
+            header('location: login_page.php');
         }
     }
 

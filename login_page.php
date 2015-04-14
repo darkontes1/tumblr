@@ -35,7 +35,7 @@ define ('APP_PATH', __DIR__);
     }
     var_dump($_SESSION);
 ?>
-    <form method="POST" class="login" action="backoffice.php" >
+    <form method="POST" class="login" action="back_page.php" >
         <fieldset>
             <legend>Connexion</legend>
             <label>login</label><input type="text" name="loginCo" placeholder="votre login" value="<?php echo $loginCo; ?>" required>
@@ -44,7 +44,7 @@ define ('APP_PATH', __DIR__);
         </fieldset>
     </form>
 
-    <form method="POST" class="login" action="backoffice.php" >
+    <form method="POST" class="login" action="back_page.php" >
         <fieldset>
             <legend>Inscription</legend>
             <label>Votre nom</label><input type="text" name="nom" placeholder="votre nom" 

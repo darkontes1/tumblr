@@ -74,7 +74,7 @@
             $data->execute();
             
             $result = $data->fetchAll(PDO::FETCH_ASSOC);
-            var_dump($result);
+            //var_dump($result);
             $image = new IMAGE();
             $image->createfigure($result[0]['nomImage'],$result[0]['captionImage']);
             $bdd = null;
@@ -128,7 +128,7 @@
             }
 
             $query = 'UPDATE images SET nomImage=:nomImageUpd, captionImage=:captionImageUpd,'; //requète SQL
-            $query .= 'real_path=:real_pathUpd, createdOn=:createdOnUpd WHERE nomImage=:image'; //requète SQL
+            $query .= ' real_path=:real_pathUpd, createdOn=:createdOnUpd WHERE nomImage=:image'; //requète SQL
 
 
             $data = $link->prepare($query);
@@ -167,7 +167,7 @@
                 }
                 //INSERT INTO de l'image dans la BDD
                 $query = 'INSERT INTO images (nomImage,captionImage,real_path,createdOn)'; //requète SQL
-                $query .= 'VALUES (:nomImage,:captionImage,:real_path,NOW())';    //requète SQL
+                $query .= ' VALUES (:nomImage,:captionImage,:real_path,NOW())';    //requète SQL
                 
                 $data = $link->prepare($query);
                 $data->bindValue('nomImage', $nomImage,PDO::PARAM_STR);

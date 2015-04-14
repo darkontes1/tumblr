@@ -34,7 +34,7 @@
             $query .= 'VALUES (:nom,:prenom,:hash,NOW())';
             
             $data = $link->prepare($query);
-            $data->bindValue('nomUser',$nom,PDO::PARAM_STR);
+            $data->bindValue('nom',$nom,PDO::PARAM_STR);
             $data->bindValue('prenom',$prenom,PDO::PARAM_STR);
             $data->bindValue('hash',$hash,PDO::PARAM_STR);
             $data->execute();
@@ -58,20 +58,22 @@
             $bdd = new BDD();   //Objet bdd pour faire la connection
             $link = $bdd->createLinkBDD();//link avec la BDD
             $hash = crypt($tabUsers['passwordCo'],'$5$'.SALT.'$');  //cryptage on peut utiliser password_verify
-            $query = 'SELECT COUNT(*) FROM users WHERE login = :tabUsers';    //requète SQL
-            $query .= 'AND passwordUser = :hash';
-            $data->bindValue('tabUsers',$tabUsers['passwordCo'],PDO::PARAM_STR);
-            $data->bindValue('hash',$hash,PDO::PARAM_STR);
+            $query = 'SELECT * FROM users WHERE login = :login';    //requète SQL
+            $query .= ' AND passwordUser = :hash LIMIT 1';
             $data = $link->prepare($query);
+            $data->bindValue('login',$tabUsers['loginCo'],PDO::PARAM_STR);
+            $data->bindValue('hash',$hash,PDO::PARAM_STR);
             $data->execute();
             $result = $data->fetchAll(PDO::FETCH_ASSOC);
             $err = $link->errorInfo();
-            if($err !== '00000'){
+            print_r($err);
+            if($err[0] !== '00000'){
                 return FALSE;
             }
-            $bdd->closeBDD();
+            $bdd = null;
             //Si aucun resultat =>
-            if($result==0){
+            print_r($result);
+            if(empty($result)){
                 return FALSE;
             }
             //si un résultat =>
