@@ -109,21 +109,22 @@
                 $createdOnUpd = $recup['createdOn'];
             }
 
-            $reqSImages = 'UPDATE images SET nomImage="'.$nomImageUpd.'", captionImage="'.$captionImageUpd.'",';
-            $reqSImages .= 'real_path="'.$real_pathUpd.'", createdOn="'.$createdOnUpd.'" WHERE nomImage="'.$image.'"'; //requète SQL
-            $resSImages = mysqli_query($bdd,$reqSImages);   //Resultat de le la requete SQL
-            $bdd->closeBDD();
+            $query = 'UPDATE images SET nomImage="'.$nomImageUpd.'", captionImage="'.$captionImageUpd.'",'; //requète SQL
+            $query .= 'real_path="'.$real_pathUpd.'", createdOn="'.$createdOnUpd.'" WHERE nomImage="'.$image.'"'; //requète SQL
+            $data = $link->prepare($query);
+            $data->execute();
+            $bdd = null;
         }
 
         //Insert dans la base de données une nouvelle image avec upload de l'image
         function uploadImage($nomImage,$typeImage,$sizeImage,$error,$tmpNameImage,$captionImage){
             $extensions_valides = array('image/jpg','image/jpeg','image/gif','image/png');  //liste des extensions valides
             $bdd = new BDD();   //Objet bdd pour faire la connection
-            $bdd->createLinkBDD();//link avec la BDD
+            $link = $bdd->createLinkBDD();//link avec la BDD
             //Si il y a une erreur lors du transfert de l'image
             if($error > 0){
                 printf('Erreur $_FILES snif');
-                $bdd->closeBDD();
+                $bdd = null;
                 exit();
             }
             //Ajoute un real_path qui permet de l'identifier de manière unique
@@ -138,12 +139,13 @@
                     printf('Deplacement fail');
                 }
                 //INSERT INTO de l'image dans la BDD
-                $reqUploadImage = 'INSERT INTO images (nomImage,captionImage,real_path,createdOn)';
-                $reqUploadImage .= 'VALUES ("'.$nomImage.'","'.$captionImage.'","'.$real_path.'",NOW())';
-                //Resultat de la requête
-                $resUploadImage = mysqli_query($bdd,$reqUploadImage);
+                $query = 'INSERT INTO images (nomImage,captionImage,real_path,createdOn)'; //requète SQL
+                $query .= 'VALUES ("'.$nomImage.'","'.$captionImage.'","'.$real_path.'",NOW())';    //requète SQL
+                $data = $link->prepare($query);
+                $data->execute();
+               
                 //Si la requête s'est mal passé, ça renvoie une erreur
-                if(!$resUploadImage){
+                if(!$data){
                     printf('Code Erreur !');
                 }
             }
@@ -151,7 +153,7 @@
             else{
                 printf('Problème d\'extension ou de taille');
             }
-            $bdd->closeBDD();
+            $bdd = null;
         }
     }
 ?>
