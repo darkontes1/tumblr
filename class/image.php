@@ -48,7 +48,7 @@
             $query = 'SELECT * FROM images WHERE nomImage=:image'; //requète SQL
             
             $data = $link->prepare($query);
-            $data->bindValue('image', $image);
+            $data->bindValue('image', $image,PDO::PARAM_STR);
             $data->execute();
             
             $result = $data->fetchAll(PDO::FETCH_ASSOC);
@@ -63,7 +63,7 @@
             $query = 'SELECT * FROM images WHERE nomImage=:image'; //requète SQL
             
             $data = $link->prepare($query);
-            $data->bindValue('image', $image);
+            $data->bindValue('image', $image,PDO::PARAM_STR);
             $data->execute();
             
             $result = $data->fetchAll(PDO::FETCH_ASSOC);
@@ -78,7 +78,7 @@
             $query = 'DELETE from images WHERE nomImage=:image'; //requète SQL            
             
             $data = $link->prepare($query);
-            $data->bindValue('image', $image);
+            $data->bindValue('image', $image,PDO::PARAM_STR);
             $data->execute();
             
             $bdd = null;
@@ -124,11 +124,11 @@
 
             $data = $link->prepare($query);
 
-            $data->bindValue('image', $image);
-            $data->bindValue('nomImageUpd', $nomImageUpd);
-            $data->bindValue('captionImageUpd', $captionImageUpd);
-            $data->bindValue('real_pathUpd', $real_pathUpd);
-            $data->bindValue('createdOnUpd', $createdOnUpd);
+            $data->bindValue('image', $image,PDO::PARAM_STR);
+            $data->bindValue('nomImageUpd', $nomImageUpd,PDO::PARAM_STR);
+            $data->bindValue('captionImageUpd', $captionImageUpd,PDO::PARAM_STR);
+            $data->bindValue('real_pathUpd', $real_pathUpd,PDO::PARAM_STR);
+            $data->bindValue('createdOnUpd', $createdOnUpd,PDO::PARAM_STR);
             $data->execute();
             
             $bdd = null;
@@ -161,9 +161,9 @@
                 $query .= 'VALUES (:nomImage,:captionImage,:real_path,NOW())';    //requète SQL
                 
                 $data = $link->prepare($query);
-                $data->bindValue('nomImage', $nomImage);
-                $data->bindValue('captionImage', $captionImage);
-                $data->bindValue('real_path', $real_path);
+                $data->bindValue('nomImage', $nomImage,PDO::PARAM_STR);
+                $data->bindValue('captionImage', $captionImage,PDO::PARAM_STR);
+                $data->bindValue('real_path', $real_path,PDO::PARAM_STR);
                 
                 $data->execute();
                

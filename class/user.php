@@ -31,15 +31,24 @@
             $link = $bdd->createLinkBDD();//link avec la BDD
             $hash = crypt($password,'$5$'.SALT.'$');    //cryptage utiliser password_hash
             $query = 'INSERT INTO users (nomUser,prenomUser,passwordUser,createdOn)'; //requète SQL
-            $query .= 'VALUES ("'.$nom.'","'.$prenom.'","'.$hash.'",NOW())';
+            $query .= 'VALUES (:nom,:prenom,:hash,NOW())';
+            
             $data = $link->prepare($query);
+            $data->bindValue('nomUser',$nom,PDO::PARAM_STR);
+            $data->bindValue('prenom',$prenom,PDO::PARAM_STR);
+            $data->bindValue('hash',$hash,PDO::PARAM_STR);
             $data->execute();
+            
             //requête update
             $id = $link->lastInsertId('id');
             $login = mb_substr($prenom,0,1).'.'.mb_substr($nom,0,6).$id; // login créé
-            $query = 'UPDATE users SET login="'.$login.'" WHERE idUser = "'.$id.'"';
+            $query = 'UPDATE users SET login=:login WHERE idUser = :id';
+
             $data = $link->prepare($query);
+            $data->bindValue('login',$login,PDO::PARAM_STR);
+            $data->bindValue('id',$id,PDO::PARAM_INT);
             $data->execute();
+            
             $bdd = null;
             return $login;
         }
@@ -49,8 +58,10 @@
             $bdd = new BDD();   //Objet bdd pour faire la connection
             $link = $bdd->createLinkBDD();//link avec la BDD
             $hash = crypt($tabUsers['passwordCo'],'$5$'.SALT.'$');  //cryptage on peut utiliser password_verify
-            $query = 'SELECT COUNT(*) FROM users WHERE login = "'.$tabUsers['loginCo'].'"';    //requète SQL
-            $query .= 'AND passwordUser = "'.$hash.'"';
+            $query = 'SELECT COUNT(*) FROM users WHERE login = :tabUsers';    //requète SQL
+            $query .= 'AND passwordUser = :hash';
+            $data->bindValue('tabUsers',$tabUsers['passwordCo'],PDO::PARAM_STR);
+            $data->bindValue('hash',$hash,PDO::PARAM_STR);
             $data = $link->prepare($query);
             $data->execute();
             $result = $data->fetchAll(PDO::FETCH_ASSOC);
