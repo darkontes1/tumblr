@@ -54,7 +54,7 @@
             $data = $link->prepare($query);
             $data->execute();
             $result = $data->fetchAll(PDO::FETCH_ASSOC);
-            $err = $link->errorInfo()
+            $err = $link->errorInfo();
             if($err !== '00000'){
                 return FALSE;
             }
