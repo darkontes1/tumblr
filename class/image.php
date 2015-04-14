@@ -47,7 +47,7 @@
         //Récupère juste une image passée en paramètre dans la BDD
         function recupImage($image){
             $bdd = new BDD();   //Objet bdd pour faire la connection
-            $bdd->createLinkBDD();//link avec la BDD
+            $link = $bdd->createLinkBDD();//link avec la BDD
             $query = 'SELECT * FROM images WHERE nomImage="'.$image.'"'; //requète SQL
             $data = $link->prepare($query);
             $data->execute();
