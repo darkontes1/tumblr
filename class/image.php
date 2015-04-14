@@ -84,12 +84,17 @@
         function deleteImage($image){
             $bdd = new BDD();   //Objet bdd pour faire la connection
             $link = $bdd->createLinkBDD();//link avec la BDD
+            //Supprime de la table image
             $query = 'DELETE from images WHERE nomImage=:image'; //requète SQL            
-            
             $data = $link->prepare($query);
             $data->bindValue('image', $image,PDO::PARAM_STR);
             $data->execute();
-            
+            //Supprime de la table de relation entre image et user
+            $query = 'DELETE from relimageuser WHERE relimageuser.idImage';
+            $query .= ' IN (SELECT image.idImage FROM image WHERE nomImage LIKE :image);'; //requète SQL            
+            $data = $link->prepare($query);
+            $data->bindValue('image', $image,PDO::PARAM_STR);
+            $data->execute();
             $bdd = null;
         }
 
@@ -144,7 +149,7 @@
         }
 
         //Insert dans la base de données une nouvelle image avec upload de l'image
-        function uploadImage($nomImage,$typeImage,$sizeImage,$error,$tmpNameImage,$captionImage){
+        function uploadImage($nomImage,$typeImage,$sizeImage,$error,$tmpNameImage,$captionImage,$user){
             $extensions_valides = array('image/jpg','image/jpeg','image/gif','image/png');  //liste des extensions valides
             $bdd = new BDD();   //Objet bdd pour faire la connection
             $link = $bdd->createLinkBDD();//link avec la BDD
@@ -168,15 +173,23 @@
                 //INSERT INTO de l'image dans la BDD
                 $query = 'INSERT INTO images (nomImage,captionImage,real_path,createdOn)'; //requète SQL
                 $query .= ' VALUES (:nomImage,:captionImage,:real_path,NOW())';    //requète SQL
-                
                 $data = $link->prepare($query);
                 $data->bindValue('nomImage', $nomImage,PDO::PARAM_STR);
                 $data->bindValue('captionImage', $captionImage,PDO::PARAM_STR);
                 $data->bindValue('real_path', $real_path,PDO::PARAM_STR);
-                
                 $data->execute();
-               
                 //Si la requête s'est mal passé, ça renvoie une erreur
+                if(!$data){
+                    printf('Code Erreur !');
+                }
+                $id = $link->lastInsertId('id');
+                //INSERT INTO de l'image dans la table relimageuser
+                $query = 'INSERT INTO relimageuser (idImage,idUser)'; //requète SQL
+                $query .= ' VALUES (:idImage, :idUser)';    //requète SQL
+                $data = $link->prepare($query);
+                $data->bindValue('idImage', $id,PDO::PARAM_INT);
+                $data->bindValue('idUser', $user,PDO::PARAM_STR);
+                $data->execute();
                 if(!$data){
                     printf('Code Erreur !');
                 }

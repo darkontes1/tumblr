@@ -5,10 +5,7 @@
         private $login;
         private $password;
         private $createdOn;
-        //Constructeur de la classe user
-        public function __construct(){
-
-        }
+        
         //Récupère les logs des users dans la BDD
         function getUsers(){
             $bdd = new BDD();   //Objet bdd pour faire la connection
@@ -78,6 +75,18 @@
             }
             //si un résultat =>
             return TRUE;
+        }
+
+        //Récupère l'idUser en fonction du login passé en paramètre
+        function getIdUser($tabUser){
+            $bdd = new BDD();   //Objet bdd pour faire la connection
+            $link = $bdd->createLinkBDD();//link avec la BDD
+            $query = 'SELECT idUser FROM users WHERE login = :login LIMIT 1';    //requète SQL
+            $data = $link->prepare($query);
+            $data->bindValue('login',$tabUsers['loginCo'],PDO::PARAM_STR);
+            $data->execute();
+            $result = $data->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
         }
     }
 ?>

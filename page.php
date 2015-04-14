@@ -30,7 +30,7 @@ session_start();
                 $caption = filter_input(INPUT_POST,'caption',FILTER_SANITIZE_STRING);
                 //création de l'enregistrement dans la BDD
                 //createImage($image,$caption);     1**
-                $imageUpl->uploadImage($image,$type,$size,$error,$tmpNameImage,$caption);
+                $imageUpl->uploadImage($image,$type,$size,$error,$tmpNameImage,$caption,$_SESSION['idUser']);
             }
         } 
     }

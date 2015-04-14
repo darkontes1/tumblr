@@ -32,6 +32,8 @@ session_start();
         if($logon==TRUE){
             $_SESSION['connect'] = TRUE;
             $_SESSION['connectime'] = time();
+            $id = $utilisateur->getIdUser($tabPost);
+            $_SESSION['idUser'] = $id;
             header('location: page.php');
         }
         else{
