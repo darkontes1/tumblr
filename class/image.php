@@ -98,56 +98,6 @@
             $bdd = null;
         }
 
-        //Update une image passée en paramètre de la BDD
-        function updateImage($image,$nomImage='',$captionImage='',$real_path='',$createdOn='0000-00-00'){
-            $bdd = new BDD();   //Objet bdd pour faire la connection
-            $link = $bdd->createLinkBDD();//link avec la BDD
-            $recup = recupImage($image);
-
-            if(empty($recup['nomImage'])){
-                $nomImageUpd = $nomImage;
-            }
-            else{
-                $nomImageUpd = $recup['nomImage'];
-            }
-
-            if(empty($recup['captionImage'])){
-                $captionImageUpd = $captionImage;
-            }
-            else{
-                $captionImageUpd = $recup['captionImage'];
-            }
-
-            if(empty($recup['real_path'])){
-                $real_pathUpd = $real_path;
-            }
-            else{
-                $real_pathUpd = $recup['real_path'];
-            }
-
-            if($recup['createdOn']=='0000-00-00'){
-                $createdOnUpd = $createdOn;
-            }
-            else{
-                $createdOnUpd = $recup['createdOn'];
-            }
-
-            $query = 'UPDATE images SET nomImage=:nomImageUpd, captionImage=:captionImageUpd,'; //requète SQL
-            $query .= ' real_path=:real_pathUpd, createdOn=:createdOnUpd WHERE nomImage=:image'; //requète SQL
-
-
-            $data = $link->prepare($query);
-
-            $data->bindValue('image', $image,PDO::PARAM_STR);
-            $data->bindValue('nomImageUpd', $nomImageUpd,PDO::PARAM_STR);
-            $data->bindValue('captionImageUpd', $captionImageUpd,PDO::PARAM_STR);
-            $data->bindValue('real_pathUpd', $real_pathUpd,PDO::PARAM_STR);
-            $data->bindValue('createdOnUpd', $createdOnUpd,PDO::PARAM_STR);
-            $data->execute();
-            
-            $bdd = null;
-        }
-
         //Insert dans la base de données une nouvelle image avec upload de l'image
         function uploadImage($nomImage,$typeImage,$sizeImage,$error,$tmpNameImage,$captionImage,$user){
             $extensions_valides = array('image/jpg','image/jpeg','image/gif','image/png');  //liste des extensions valides
@@ -198,6 +148,56 @@
             else{
                 printf('Problème d\'extension ou de taille');
             }
+            $bdd = null;
+        }
+
+        //Update une image passée en paramètre de la BDD
+        function updateImage($image,$nomImage='',$captionImage='',$real_path='',$createdOn='0000-00-00'){
+            $bdd = new BDD();   //Objet bdd pour faire la connection
+            $link = $bdd->createLinkBDD();//link avec la BDD
+            $recup = recupImage($image);
+
+            if(empty($recup['nomImage'])){
+                $nomImageUpd = $nomImage;
+            }
+            else{
+                $nomImageUpd = $recup['nomImage'];
+            }
+
+            if(empty($recup['captionImage'])){
+                $captionImageUpd = $captionImage;
+            }
+            else{
+                $captionImageUpd = $recup['captionImage'];
+            }
+
+            if(empty($recup['real_path'])){
+                $real_pathUpd = $real_path;
+            }
+            else{
+                $real_pathUpd = $recup['real_path'];
+            }
+
+            if($recup['createdOn']=='0000-00-00'){
+                $createdOnUpd = $createdOn;
+            }
+            else{
+                $createdOnUpd = $recup['createdOn'];
+            }
+
+            $query = 'UPDATE images SET nomImage=:nomImageUpd, captionImage=:captionImageUpd,'; //requète SQL
+            $query .= ' real_path=:real_pathUpd, createdOn=:createdOnUpd WHERE nomImage=:image'; //requète SQL
+
+
+            $data = $link->prepare($query);
+
+            $data->bindValue('image', $image,PDO::PARAM_STR);
+            $data->bindValue('nomImageUpd', $nomImageUpd,PDO::PARAM_STR);
+            $data->bindValue('captionImageUpd', $captionImageUpd,PDO::PARAM_STR);
+            $data->bindValue('real_pathUpd', $real_pathUpd,PDO::PARAM_STR);
+            $data->bindValue('createdOnUpd', $createdOnUpd,PDO::PARAM_STR);
+            $data->execute();
+            
             $bdd = null;
         }
     }
